@@ -4,9 +4,8 @@ INT424 E-Commerce Final Project (Project 3: Handmade Products Marketplace)
 
 | | |
 |---|---|
-| **Group** | GroupXX *(replace with your group number)* |
+| **Group** | Individual project (solo) |
 | **Student** | Yaseen Ghiyath Alfakir – ID 202211398 |
-| **Section** | *(replace)* |
 | **Instructor** | Dr. Mohammad Al Nawayseh |
 | **GitHub repository** | https://github.com/yfexe/handmade-marketplace |
 | **GitHub Pages (live site)** | https://yfexe.github.io/handmade-marketplace/ |
