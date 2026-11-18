@@ -8,8 +8,8 @@ INT424 E-Commerce Final Project (Project 3: Handmade Products Marketplace)
 | **Students** | Student Name 1 – ID 000000, Student Name 2 – ID 000000 *(replace)* |
 | **Section** | *(replace)* |
 | **Instructor** | Dr. Mohammad Al Nawayseh |
-| **GitHub repository** | https://github.com/YOUR-USERNAME/handmade-marketplace *(replace)* |
-| **GitHub Pages (live site)** | https://YOUR-USERNAME.github.io/handmade-marketplace/ *(replace)* |
+| **GitHub repository** | https://github.com/yfexe/handmade-marketplace |
+| **GitHub Pages (live site)** | https://yfexe.github.io/handmade-marketplace/ |
 
 ## Project description
 
