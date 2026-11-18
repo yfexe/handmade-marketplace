@@ -23,6 +23,13 @@ drop function if exists admin_stats()              cascade;
 drop function if exists admin_top_products(int)    cascade;
 drop function if exists admin_sales_by_category()  cascade;
 drop function if exists admin_sales_by_day(int)    cascade;
+drop function if exists orders_defaults()           cascade;
+drop function if exists order_items_before_insert() cascade;
+drop function if exists order_items_after_insert()  cascade;
+drop function if exists orders_status_change()      cascade;
+drop function if exists reviews_before_insert()     cascade;
+-- remove the fake demo users (see demo_data.sql) so a full reset starts clean
+delete from auth.users where email like '%.demo@example.com';
 
 -- ---------- 1. tables --------------------------------------------------
 create table category (
@@ -204,15 +211,20 @@ alter table orders      enable row level security;
 alter table order_items enable row level security;
 alter table reviews     enable row level security;
 
--- defence in depth: the public (anon) key can only READ; and signed-in users
--- may only change the specific columns listed below.
-revoke insert, update, delete on all tables in schema public from anon;
-revoke update on customers from authenticated;
-grant  update (full_name, phone, address) on customers to authenticated;   -- role can NOT be changed
-revoke update on orders from authenticated;
-grant  update (status) on orders to authenticated;
-revoke update on reviews from authenticated;
-grant  update (rating, comment) on reviews to authenticated;
+-- Table privileges (layer 1). Row Level Security (layer 2, below) then decides WHICH rows.
+-- Start from nothing and grant only what the site needs: the public (anon) key can only
+-- READ the catalogue and reviews, and signed-in users may only change the columns listed.
+revoke all on all tables in schema public from anon, authenticated;
+grant usage on schema public to anon, authenticated;
+grant select on category, product, reviews to anon;
+grant select on category, product, reviews, customers, orders, order_items to authenticated;
+grant insert, update, delete on category to authenticated;                   -- RLS: admin only
+grant insert, update, delete on product  to authenticated;                   -- RLS: admin only
+grant insert on orders, order_items to authenticated;                         -- RLS: own order only
+grant insert, delete on reviews to authenticated;                             -- RLS: verified buyer / owner
+grant update (full_name, phone, address) on customers to authenticated;       -- 'role' can NOT be changed
+grant update (status)  on orders  to authenticated;                           -- cancel (own) / status (admin)
+grant update (rating, comment) on reviews to authenticated;
 
 -- category + product: everybody reads, only admins write
 create policy "category_read"  on category for select to anon, authenticated using (true);

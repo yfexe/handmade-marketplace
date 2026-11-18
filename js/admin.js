@@ -56,7 +56,7 @@ async function loadDashboard() {
   $("stat-grid").innerHTML = card(s.total_products, "Products") + card(s.total_orders, "Orders (not cancelled)") +
     card(fmt(s.total_sales), "Total sales (incl. VAT)") + card(s.total_customers, "Customers") +
     card(s.avg_rating + " ★", `Average rating (${s.total_reviews} reviews)`) + card(s.low_stock_count, "Low-stock products");
-  drawChart("chart-day", "line", byDay.data.map((d) => d.day.slice(5)), byDay.data.map((d) => Number(d.sales)), "Sales (AED)", "#1f5f5b");
+  drawChart("chart-day", "bar", byDay.data.map((d) => d.day.slice(5)), byDay.data.map((d) => Number(d.sales)), "Sales (AED)", "#1f5f5b");
   drawChart("chart-cat", "doughnut", byCat.data.map((c) => c.category), byCat.data.map((c) => Number(c.revenue)), "Revenue (AED)", "#1f5f5b");
   drawChart("chart-top", "bar", top.data.map((p) => p.name), top.data.map((p) => Number(p.units_sold)), "Units sold", "#b5542f");
   $("low-stock").innerHTML = low.data && low.data.length
