@@ -45,7 +45,8 @@ create table product (
   description  text not null default '',
   price        numeric(10,2) not null check (price >= 0),          -- AED, before VAT
   stock        int  not null default 0 check (stock >= 0),         -- DB refuses overselling
-  image_url    text not null default 'images/placeholder.svg',
+  image_url    text not null default 'images/placeholder.svg'
+               check (image_url ~ '^(images/[A-Za-z0-9_.-]+|https://[^\s"''<>]+)$'),   -- local file or https link only
   artisan      text not null,                                       -- the maker
   occasions    text[] not null default '{}',                        -- used by the Gift Finder
   created_at   timestamptz not null default now()
@@ -117,14 +118,13 @@ grant execute on function is_admin() to anon, authenticated;
 -- 3a. every new Supabase Auth user automatically gets a customers row
 create function handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
+declare nm text; ph text;
 begin
-  insert into customers (id, full_name, email, phone)
-  values (
-    new.id,
-    coalesce(nullif(trim(new.raw_user_meta_data->>'full_name'), ''), split_part(new.email, '@', 1)),
-    new.email,
-    nullif(trim(new.raw_user_meta_data->>'phone'), '')
-  );
+  nm := left(trim(coalesce(new.raw_user_meta_data->>'full_name', '')), 80);
+  if char_length(nm) < 2 then nm := left(split_part(new.email, '@', 1), 80); end if;
+  if char_length(nm) < 2 then nm := 'Customer'; end if;
+  ph := left(nullif(trim(coalesce(new.raw_user_meta_data->>'phone', '')), ''), 20);
+  insert into customers (id, full_name, email, phone) values (new.id, nm, new.email, ph);
   return new;
 end $$;
 create trigger on_auth_user_created after insert on auth.users
@@ -173,7 +173,7 @@ end $$;
 create trigger trg_order_items_after_insert after insert on order_items
   for each row execute function order_items_after_insert();
 
--- 3e. cancelling an order puts the stock back; a cancelled order stays cancelled
+-- 3e. cancelling an order puts the stock back (and removes reviews that depended on it); it stays cancelled
 create function orders_status_change() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
@@ -183,6 +183,13 @@ begin
   if new.status = 'Cancelled' then
     update product p set stock = p.stock + oi.quantity
       from order_items oi where oi.order_id = new.id and oi.product_id = p.id;
+    -- anti fake-review: a review is only kept while the customer still has a non-cancelled order for that product
+    delete from reviews r
+     where r.customer_id = new.customer_id
+       and r.product_id in (select product_id from order_items where order_id = new.id)
+       and not exists (select 1 from order_items oi join orders o on o.id = oi.order_id
+                       where o.customer_id = new.customer_id and o.status <> 'Cancelled'
+                         and o.id <> new.id and oi.product_id = r.product_id);
   end if;
   return new;
 end $$;
