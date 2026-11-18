@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create account | Turath</title>
+  <link rel="icon" href="images/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main class="container">
+    <form class="form-card" id="register-form" novalidate>
+      <h1>Create your account</h1>
+      <label for="full_name">Full name</label>
+      <input id="full_name" autocomplete="name" required maxlength="80">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="email" required>
+      <label for="phone">UAE mobile (optional)</label>
+      <input id="phone" type="tel" autocomplete="tel" placeholder="0501234567">
+      <label for="password">Password (at least 8 characters)</label>
+      <input id="password" type="password" autocomplete="new-password" minlength="8" required>
+      <label for="confirm">Confirm password</label>
+      <input id="confirm" type="password" autocomplete="new-password" required>
+      <div id="form-msg" class="msg" hidden role="alert"></div>
+      <p><button class="btn" type="submit">Register</button></p>
+      <p class="muted small">Already have an account? <a href="login.html" data-keep-next>Log in</a></p>
+    </form>
+  </main>
+  <footer id="site-footer"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

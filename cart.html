@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your cart | Turath</title>
+  <link rel="icon" href="images/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main class="container">
+    <h1 style="margin-top:1.5rem">Your cart</h1>
+    <div class="two-col">
+      <div id="cart-list"></div>
+      <aside class="summary" id="cart-summary" hidden>
+        <div id="cart-sum-body"></div>
+        <p><a class="btn" style="width:100%;text-align:center" href="checkout.html">Proceed to checkout</a></p>
+        <p class="muted small">Prices are checked against the database when you open the cart.</p>
+      </aside>
+    </div>
+  </main>
+  <footer id="site-footer"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>

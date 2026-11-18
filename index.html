@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turath | Handmade Gulf Crafts</title>
+  <meta name="description" content="Turath is an online marketplace for handmade Gulf crafts: jewelry, decorations, candles, accessories and gifts made by UAE artisans.">
+  <link rel="icon" href="images/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Handmade Gulf heritage,<br>made with care.</h1>
+        <p>Jewelry, home decor, candles and gifts made by UAE artisans. Find the right gift for Eid, a wedding or a birthday in seconds.</p>
+        <div class="hero-actions">
+          <a class="btn" href="products.html">Shop all crafts</a>
+          <a class="btn btn-light" href="products.html#gift-finder">Try the Gift Finder</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head"><h2>Shop by category</h2></div>
+        <div class="grid" id="home-categories"><div class="spinner">Loading…</div></div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container">
+        <div class="section-head"><h2>Gifts for every occasion</h2><a href="products.html#gift-finder">Open the Gift Finder →</a></div>
+        <p class="muted">Choose an occasion and we will show the handmade pieces that fit it.</p>
+        <div class="chips" id="home-occasions"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head"><h2>New arrivals</h2><a href="products.html">See everything →</a></div>
+        <div class="grid" id="home-new"><div class="spinner">Loading…</div></div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container values">
+        <div class="value"><h3>Made by hand</h3><p class="muted">Every piece is made by a named UAE artisan, never by a factory line.</p></div>
+        <div class="value"><h3>Honest reviews</h3><p class="muted">Only customers who bought a product can review it.</p></div>
+        <div class="value"><h3>Clear prices</h3><p class="muted">Prices in AED. 5% VAT is shown before you pay, and delivery is free.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop handmade crafts | Turath</title>
+  <meta name="description" content="Browse handmade jewelry, decorations, candles, accessories and gifts. Search, filter by price and occasion, and find gifts with the Gift Finder.">
+  <link rel="icon" href="images/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+  <main class="container">
+    <div class="shop-layout">
+      <aside class="filters" aria-label="Search and filters">
+        <h2>Find products</h2>
+        <form id="filters-form">
+          <label for="f-search">Search (several words allowed)</label>
+          <input id="f-search" type="search" placeholder="e.g. oud candle" maxlength="80">
+          <label for="f-category">Category</label>
+          <select id="f-category"></select>
+          <div class="row two">
+            <div><label for="f-min">Min price (AED)</label><input id="f-min" type="number" min="0" step="1" inputmode="numeric"></div>
+            <div><label for="f-max">Max price (AED)</label><input id="f-max" type="number" min="0" step="1" inputmode="numeric"></div>
+          </div>
+          <label for="f-occasion">Occasion</label>
+          <select id="f-occasion"></select>
+          <label style="display:flex;gap:.5rem;align-items:center;font-weight:400"><input type="checkbox" id="f-stock"> Show only products in stock</label>
+          <label for="f-sort">Sort by</label>
+          <select id="f-sort">
+            <option value="new">Newest first</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+          <p style="margin-top:1rem"><button class="btn btn-light" type="button" id="reset-btn">Clear all filters</button></p>
+        </form>
+      </aside>
+
+      <section>
+        <div class="gift-finder" id="gift-finder">
+          <h3>🎁 Gift Finder</h3>
+          <p class="muted small" style="margin:0 0 .5rem">Tell us the occasion and your budget. We show gifts that are in stock, cheapest first.</p>
+          <form id="gift-form" class="row two" style="align-items:end">
+            <div><label for="g-occasion" style="margin-top:0">Occasion</label><select id="g-occasion" required></select></div>
+            <div><label for="g-budget" style="margin-top:0">Budget</label>
+              <select id="g-budget"><option value="">Any budget</option><option value="100">Up to AED 100</option><option value="200">Up to AED 200</option><option value="300">Up to AED 300</option><option value="500">Up to AED 500</option></select></div>
+            <div><button class="btn" type="submit">Find gifts</button></div>
+          </form>
+        </div>
+        <div class="result-bar"><strong id="result-count" aria-live="polite"></strong><span class="muted small" id="active-filters"></span></div>
+        <div class="grid" id="product-grid"></div>
+      </section>
+    </div>
+  </main>
+  <footer id="site-footer"></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</body>
+</html>
