@@ -4,8 +4,8 @@ INT424 E-Commerce Final Project (Project 3: Handmade Products Marketplace)
 
 | | |
 |---|---|
-| **Group** | GroupXX *(replace)* |
-| **Students** | Student Name 1 – ID 000000, Student Name 2 – ID 000000 *(replace)* |
+| **Group** | GroupXX *(replace with your group number)* |
+| **Student** | Yaseen Ghiyath Alfakir – ID 202211398 |
 | **Section** | *(replace)* |
 | **Instructor** | Dr. Mohammad Al Nawayseh |
 | **GitHub repository** | https://github.com/yfexe/handmade-marketplace |
@@ -86,4 +86,4 @@ redirects. Full review with the five risks and policy code: `security_review.md`
 
 ## AI-use declaration
 
-AI tools (Claude) were used to help write and test code. All members can explain the code. *(Edit to match your own statement.)*
+An AI assistant (Claude, by Anthropic) was used to help write and test the code, review its security, and draft the documentation. I checked the results and can explain the code.
