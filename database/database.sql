@@ -130,11 +130,15 @@ end $$;
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function handle_new_user();
 
--- 3b. a signed-in customer can never choose totals, status or date of a new order
+-- 3b. a signed-in customer can never choose totals, status or date of a new order,
+--     and can have at most 3 open ('Placed') orders at once (stops stock hoarding)
 create function orders_defaults() returns trigger
 language plpgsql as $$
 begin
   if auth.uid() is not null then
+    if (select count(*) from orders where customer_id = new.customer_id and status = 'Placed') >= 3 then
+      raise exception 'You already have 3 open orders. Please wait for them to ship, or cancel one.';
+    end if;
     new.status := 'Placed'; new.order_date := now();
     new.subtotal := 0; new.vat_amount := 0; new.total_amount := 0;
   end if;
@@ -148,6 +152,8 @@ create function order_items_before_insert() returns trigger
 language plpgsql security definer set search_path = public as $$
 declare p product%rowtype;
 begin
+  perform 1 from orders where id = new.order_id and status = 'Placed' for share;   -- waits for a concurrent cancel
+  if not found then raise exception 'This order is no longer open'; end if;
   select * into p from product where id = new.product_id for update;
   if not found then raise exception 'Product % does not exist', new.product_id; end if;
   if p.stock < new.quantity then
@@ -202,6 +208,10 @@ create function reviews_before_insert() returns trigger
 language plpgsql security definer set search_path = public as $$
 declare n text;
 begin
+  perform 1 from orders o join order_items oi on oi.order_id = o.id
+   where o.customer_id = new.customer_id and oi.product_id = new.product_id and o.status <> 'Cancelled'
+   for share of o;                                                                  -- waits for a concurrent cancel
+  if not found then raise exception 'Only customers with a valid order can review this product'; end if;
   select full_name into n from customers where id = new.customer_id;
   new.reviewer_name := split_part(n, ' ', 1) ||
                        case when split_part(n, ' ', 2) <> '' then ' ' || left(split_part(n, ' ', 2), 1) || '.' else '' end;
@@ -227,8 +237,11 @@ grant select on category, product, reviews to anon;
 grant select on category, product, reviews, customers, orders, order_items to authenticated;
 grant insert, update, delete on category to authenticated;                   -- RLS: admin only
 grant insert, update, delete on product  to authenticated;                   -- RLS: admin only
-grant insert on orders, order_items to authenticated;                         -- RLS: own order only
-grant insert, delete on reviews to authenticated;                             -- RLS: verified buyer / owner
+grant insert (customer_id, shipping_name, shipping_phone, shipping_address, emirate, payment_method)
+  on orders to authenticated;                                                 -- RLS: own order only
+grant insert (order_id, product_id, quantity) on order_items to authenticated; -- price comes from the trigger
+grant insert (product_id, customer_id, rating, comment) on reviews to authenticated; -- RLS: verified buyer
+grant delete on reviews to authenticated;                                     -- RLS: owner or admin
 grant update (full_name, phone, address) on customers to authenticated;       -- 'role' can NOT be changed
 grant update (status)  on orders  to authenticated;                           -- cancel (own) / status (admin)
 grant update (rating, comment) on reviews to authenticated;

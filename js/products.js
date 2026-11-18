@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   $("f-occasion").innerHTML = occ;
   $("g-occasion").innerHTML = '<option value="">Choose an occasion…</option>' + OCCASIONS.map((o) => `<option>${o}</option>`).join("");
   await loadCategories();
+  if (window.innerWidth < 900) $("filters-details").open = false; // phones: filters start collapsed
 
   // start from the URL, e.g. products.html?category=2 or ?occasion=Eid&max=200
   const p = new URLSearchParams(location.search);

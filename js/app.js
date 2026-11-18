@@ -19,6 +19,7 @@ function toast(message, type = "info") {
     wrap.setAttribute("aria-live", "polite");
     document.body.appendChild(wrap);
   }
+  wrap.innerHTML = ""; // one message at a time
   const t = document.createElement("div");
   t.className = "toast " + type;
   t.textContent = message;
@@ -39,7 +40,7 @@ function starsOnly(avg) {
   return `<span class="stars" aria-label="${avg ? avg.toFixed(1) : "No"} out of 5 stars">${s}</span>`;
 }
 function stars(avg, count) {
-  return `${starsOnly(avg)} <span class="muted small">${count ? `(${count})` : "(no reviews)"}</span>`;
+  return count ? `${starsOnly(avg)} <span class="muted small">(${count})</span>` : '<span class="new-tag">New</span>';
 }
 function avgRating(reviews) {
   if (!reviews || !reviews.length) return 0;
@@ -86,6 +87,7 @@ async function initLayout() {
     btn.addEventListener("click", () => {
       const open = document.getElementById("nav-links").classList.toggle("open");
       btn.setAttribute("aria-expanded", open);
+      btn.textContent = open ? "✕" : "☰";
     });
   }
   const footer = document.getElementById("site-footer");

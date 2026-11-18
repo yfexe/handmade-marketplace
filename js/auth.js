@@ -2,6 +2,18 @@
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const UAE_PHONE_RE = /^(\+971|00971|0)?5\d{8}$/;
 
+// show the error right under the field that is wrong, highlight it and focus it
+function fieldError(id, text) {
+  document.querySelectorAll(".field-error").forEach((n) => n.remove());
+  document.querySelectorAll(".invalid").forEach((n) => n.classList.remove("invalid"));
+  const f = document.getElementById(id);
+  f.classList.add("invalid");
+  const m = document.createElement("div");
+  m.className = "field-error"; m.setAttribute("role", "alert"); m.textContent = text;
+  f.insertAdjacentElement("afterend", m);
+  f.focus();
+}
+
 async function handleRegister(e) {
   e.preventDefault();
   const msg = document.getElementById("form-msg");
@@ -12,11 +24,11 @@ async function handleRegister(e) {
   const confirm = document.getElementById("confirm").value;
 
   // client-side validation (the database also enforces its own constraints)
-  if (full_name.length < 2) return showMsg(msg, "Please enter your full name.");
-  if (!EMAIL_RE.test(email)) return showMsg(msg, "Please enter a valid e-mail address.");
-  if (phone && !UAE_PHONE_RE.test(phone)) return showMsg(msg, "Phone must be a UAE mobile number, e.g. 0501234567.");
-  if (password.length < 8) return showMsg(msg, "Password must be at least 8 characters.");
-  if (password !== confirm) return showMsg(msg, "The two passwords do not match.");
+  if (full_name.length < 2) return fieldError("full_name", "Please enter your full name.");
+  if (!EMAIL_RE.test(email)) return fieldError("email", "Please enter a valid e-mail address.");
+  if (phone && !UAE_PHONE_RE.test(phone)) return fieldError("phone", "Phone must be a UAE mobile number, e.g. 0501234567.");
+  if (password.length < 8) return fieldError("password", "Password must be at least 8 characters.");
+  if (password !== confirm) return fieldError("confirm", "The two passwords do not match.");
 
   const btn = e.target.querySelector("button[type=submit]");
   btn.disabled = true;

@@ -16,18 +16,19 @@
       <form id="checkout-form" class="form-card wide" style="margin:0;max-width:none" novalidate>
         <h2>Delivery details</h2>
         <div class="row two">
-          <div><label for="shipping_name">Receiver's name</label><input id="shipping_name" maxlength="80" required></div>
-          <div><label for="shipping_phone">UAE mobile</label><input id="shipping_phone" type="tel" placeholder="0501234567" required></div>
+          <div><label for="shipping_name">Receiver's name *</label><input id="shipping_name" maxlength="80" required></div>
+          <div><label for="shipping_phone">UAE mobile *</label><input id="shipping_phone" type="tel" placeholder="0501234567" required></div>
         </div>
-        <label for="shipping_address">Address (building, street, area)</label>
-        <textarea id="shipping_address" maxlength="250" required></textarea>
+        <label for="shipping_address">Address (building, street, area) *</label>
+        <textarea id="shipping_address" maxlength="250" placeholder="Villa / building, street, area" required></textarea>
         <label for="emirate">Emirate</label>
         <select id="emirate"></select>
         <h2 style="margin-top:1.5rem">Payment</h2>
-        <label style="display:flex;gap:.5rem;align-items:center;font-weight:400"><input type="radio" checked disabled> Cash on delivery</label>
+        <div class="pay-card"><strong>✔ Cash on delivery</strong><span class="muted small">Pay when your order arrives. Delivery is free, usually 2–5 working days.</span></div>
         <p class="field-hint">This is a student project, so no real payment is taken and no card details are collected.</p>
         <div id="form-msg" class="msg" hidden role="alert"></div>
-        <p><button class="btn" type="submit" id="place-order">Place order</button></p>
+        <p><button class="btn btn-block" type="submit" id="place-order">Place order</button></p>
+        <p><a href="cart.html">← Back to cart</a></p>
       </form>
       <aside class="summary">
         <h3>Your items</h3>

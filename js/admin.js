@@ -38,7 +38,7 @@ function drawChart(id, type, labels, data, label, color) {
   charts[id] = new Chart($(id), {
     type,
     data: { labels, datasets: [{ label, data, backgroundColor: type === "line" ? "rgba(31,95,91,.15)" : (type === "doughnut" ? palette : color), borderColor: color, fill: type === "line", tension: .3 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: type === "doughnut" } }, scales: type === "doughnut" ? {} : { y: { beginAtZero: true } } },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: type === "doughnut" } }, scales: type === "doughnut" ? {} : { y: { beginAtZero: true, title: { display: true, text: label } } } },
   });
 }
 
@@ -56,7 +56,7 @@ async function loadDashboard() {
   $("stat-grid").innerHTML = card(s.total_products, "Products") + card(s.total_orders, "Orders (not cancelled)") +
     card(fmt(s.total_sales), "Total sales (incl. VAT)") + card(s.total_customers, "Customers") +
     card(s.avg_rating + " ★", `Average rating (${s.total_reviews} reviews)`) + card(s.low_stock_count, "Low-stock products");
-  drawChart("chart-day", "bar", byDay.data.map((d) => d.day.slice(5)), byDay.data.map((d) => Number(d.sales)), "Sales (AED)", "#1f5f5b");
+  drawChart("chart-day", "bar", byDay.data.map((d) => new Date(d.day).toLocaleDateString("en-GB", { day: "numeric", month: "short" })), byDay.data.map((d) => Number(d.sales)), "Sales (AED)", "#1f5f5b");
   drawChart("chart-cat", "doughnut", byCat.data.map((c) => c.category), byCat.data.map((c) => Number(c.revenue)), "Revenue (AED)", "#1f5f5b");
   drawChart("chart-top", "bar", top.data.map((p) => p.name), top.data.map((p) => Number(p.units_sold)), "Units sold", "#b5542f");
   $("low-stock").innerHTML = low.data && low.data.length

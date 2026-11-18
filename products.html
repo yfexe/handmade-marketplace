@@ -14,7 +14,8 @@
   <main class="container">
     <div class="shop-layout">
       <aside class="filters" aria-label="Search and filters">
-        <h2>Find products</h2>
+        <details id="filters-details" open>
+        <summary>Find products</summary>
         <form id="filters-form">
           <label for="f-search">Search (several words allowed)</label>
           <input id="f-search" type="search" placeholder="e.g. oud candle" maxlength="80">
@@ -36,6 +37,7 @@
           </select>
           <p style="margin-top:1rem"><button class="btn btn-light" type="button" id="reset-btn">Clear all filters</button></p>
         </form>
+        </details>
       </aside>
 
       <section>

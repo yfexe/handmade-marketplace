@@ -18,6 +18,8 @@ async function initCheckout() {
   }
   document.getElementById("co-items").innerHTML = cart.map((i) => `<div class="line"><span>${esc(i.name)} × ${i.qty}</span><span>${fmt(i.price * i.qty)}</span></div>`).join("");
   renderSummary(document.getElementById("co-summary"), cart);
+  const orderLabel = "Place order · " + fmt(cartTotals(cart).total);
+  document.getElementById("place-order").textContent = orderLabel;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ async function initCheckout() {
     const { data: order, error: oErr } = await supabaseClient.from("orders")
       .insert({ customer_id: user.id, shipping_name, shipping_phone, shipping_address, emirate })
       .select().single();
-    if (oErr) { btn.disabled = false; btn.textContent = "Place order"; return showMsg(msg, "Could not create the order: " + oErr.message); }
+    if (oErr) { btn.disabled = false; btn.textContent = orderLabel; return showMsg(msg, "Could not create the order: " + oErr.message); }
 
     // 2) INSERT the order lines (a database trigger checks stock, copies the real price, reduces stock)
     const lines = fresh.map((i) => ({ order_id: order.id, product_id: i.id, quantity: i.qty }));
@@ -48,7 +50,7 @@ async function initCheckout() {
     if (iErr) {
       // lines failed (e.g. someone bought the last item): cancel the empty order and tell the customer
       await supabaseClient.from("orders").update({ status: "Cancelled" }).eq("id", order.id);
-      btn.disabled = false; btn.textContent = "Place order";
+      btn.disabled = false; btn.textContent = orderLabel;
       await syncCartWithDb();
       return showMsg(msg, iErr.message.includes("Not enough stock") ? iErr.message + ". Please update your cart." : "Could not save the order lines: " + iErr.message);
     }

@@ -7,10 +7,10 @@
 -- =====================================================================
 
 -- ---------- demo customers (the trigger in database.sql creates their customers rows)
-insert into auth.users (instance_id, id, aud, role, email, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
+insert into auth.users (instance_id, id, aud, role, email, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, email_confirmed_at)
 select '00000000-0000-0000-0000-000000000000', t.id, 'authenticated', 'authenticated', t.email,
        '{"provider":"email","providers":["email"]}'::jsonb,
-       jsonb_build_object('full_name', t.full_name), now(), now()
+       jsonb_build_object('full_name', t.full_name), now(), now(), now()
 from (values
   ('11111111-1111-1111-1111-111111111101'::uuid, 'Fatima Al Mansoori', 'fatima.demo@example.com'),
   ('11111111-1111-1111-1111-111111111102'::uuid, 'Ahmed Khan',         'ahmed.demo@example.com'),
